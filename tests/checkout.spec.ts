@@ -1,39 +1,46 @@
 import { test, expect } from '@playwright/test';
+import LoginPage from '../pages/LoginPage'
+import InventoryPage from '../pages/InventoryPage'
+import CartPage from '../pages/CartPage'
+import CheckoutPage from '../pages/CheckoutPage'
 
 
 test.describe('Checkout flow', () => {
+    let checkoutPage: CheckoutPage
+    let cartPage: CartPage
+    let inventoryPage: InventoryPage
+
     test.beforeEach( async ({page}) => {
-        await page.goto('https://www.saucedemo.com')
-        await page.getByPlaceholder('Username').fill('standard_user')
-        await page.getByPlaceholder('Password').fill('secret_sauce');
-        await page.getByRole('button', { name: 'Login' }).click();
-    
-        await page.locator('.inventory_item').first().getByRole('button', { name: 'Add to cart' }).click();
-        await page.locator('.shopping_cart_link').click();
+        const loginPage = new LoginPage(page)
+        await loginPage.goto()
+        await loginPage.login('standard_user', 'secret_sauce')
+
+        inventoryPage = new InventoryPage(page)
+        cartPage = new CartPage(page)
+        checkoutPage = new CheckoutPage(page)
+
+        await inventoryPage.addFirstItemToCart()
+        await inventoryPage.goToCart()
     })
 
     test('Checkout successfully with full information', async ({ page }) => {
-        await page.getByRole('button', { name: 'Checkout' }).click();
-        await page.locator('[data-test="firstName"]').fill('Tuong');
-        await page.locator('[data-test="lastName"]').fill('Hoang');
-        await page.locator('[data-test="postalCode"]').fill('00760');
-        await page.getByRole('button', { name: 'Continue' }).click();
+        await cartPage.goToCheckout()
+        await checkoutPage.fillInformation('Tuong', 'Hoang', '00760')
+        await checkoutPage.continueCheckout()
 
-        await expect(page.locator('.summary_info')).toBeVisible();
-        await page.getByRole('button', { name: 'Finish' }).click();
+        await expect(checkoutPage.summaryInfo).toBeVisible();
+        await checkoutPage.finishCheckout()
 
-        await expect(page.getByText('Thank you for your order!')).toBeVisible();
+        await checkoutPage.expectOrderComplete()
     });
 
 
      test('Money in total overview displayed correctly', async ({ page }) => {
-        await page.getByRole('button', { name: 'Checkout' }).click();
-        await page.locator('[data-test="firstName"]').fill('Tuong');
-        await page.locator('[data-test="lastName"]').fill('Hoang');
-        await page.locator('[data-test="postalCode"]').fill('00760');
-        await page.getByRole('button', { name: 'Continue' }).click();
+        await cartPage.goToCheckout()
+        await checkoutPage.fillInformation('Tuong', 'Hoang', '00760')
+        await checkoutPage.continueCheckout()
 
-        await expect(page.locator('.summary_total_label')).toContainText('Total: $');
+        await expect(checkoutPage.summaryTotal).toContainText('Total: $');
     });
 
 })
