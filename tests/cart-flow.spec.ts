@@ -1,37 +1,44 @@
 import { test, expect } from '@playwright/test';
+import LoginPage  from '../pages/LoginPage';
+import  InventoryPage from '../pages/InventoryPage';
+import  CartPage  from '../pages/CartPage';
+
 
 test.describe('Cart flow', () => {
+    let inventoryPage: InventoryPage;
+    let cartPage: CartPage;
+
     test.beforeEach(async ({ page }) => {
-        await page.goto('https://www.saucedemo.com');
-        await page.getByPlaceholder('Username').fill('standard_user');
-        await page.getByPlaceholder('Password').fill('secret_sauce');
-        await page.getByRole('button', { name: 'Login' }).click();
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
+        inventoryPage = new InventoryPage(page);
+        cartPage = new CartPage(page);
     });
 
     test('Add 1 product to cart', async ({page}) => {
-        await page.locator('.inventory_item').first().getByRole('button', {name: 'Add to cart'}).click()
-        await expect(page.locator('.shopping_cart_badge')).toHaveText('1')
+        await inventoryPage.addFirstItemToCart()
+        await inventoryPage.expectCartBadgeCount('1')
     })
 
     test('Add 3 product to cart', async ({page}) => {
-        const buttons = page.getByRole('button', { name: 'Add to cart' });
-        await buttons.nth(0).click();
-        await buttons.nth(1).click();
-        await buttons.nth(2).click();
-        await expect(page.locator('.shopping_cart_badge')).toHaveText('3');
+        await inventoryPage.addItemToCartByIndex(0);
+        await inventoryPage.addItemToCartByIndex(1);
+        await inventoryPage.addItemToCartByIndex(2);
+        await inventoryPage.expectCartBadgeCount('3');
     })
 
     test('Remove product in cart', async ({ page }) => {
-        await page.locator('.inventory_item').first().getByRole('button', { name: 'Add to cart' }).click();
-        await page.locator('.shopping_cart_link').click();
-        await page.getByRole('button', { name: 'Remove' }).click();
-        await expect(page.locator('.shopping_cart_badge')).toBeHidden();
+        await inventoryPage.addFirstItemToCart()
+        await inventoryPage.goToCart()
+        await cartPage.removeFirstItem()
+        await inventoryPage.expectCartBadgeHidden()
     });
 
     test('Check added product in cart', async ({ page }) => {
-        const productName = await page.locator('.inventory_item_name').first().textContent();
-        await page.locator('.inventory_item').first().getByRole('button', { name: 'Add to cart' }).click();
-        await page.locator('.shopping_cart_link').click();
-        await expect(page.locator('.inventory_item_name')).toHaveText(productName!);
+        const productName = await inventoryPage.getFirstItemName()
+        await inventoryPage.addFirstItemToCart()
+        await inventoryPage.goToCart()
+        await cartPage.expectItemNameVisible(productName)
     });
 })
