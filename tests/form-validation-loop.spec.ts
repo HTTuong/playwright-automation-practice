@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/pages.fixture';
+import { test } from '../fixtures/pages.fixture';
 
 const invalidCases = [
   { firstName: '', lastName: 'Hoang', zip: '00100', expectedError: 'First Name is required' },
