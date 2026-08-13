@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/pages.fixture';
 
 const invalidCases = [
   { firstName: '', lastName: 'Hoang', zip: '00100', expectedError: 'First Name is required' },
@@ -7,20 +7,19 @@ const invalidCases = [
 ];
 
 for (const data of invalidCases) {
-  test(`Missing information: ${data.expectedError}`, async ({ page }) => {
-    await page.goto('https://www.saucedemo.com');
-    await page.getByPlaceholder('Username').fill('standard_user');
-    await page.getByPlaceholder('Password').fill('secret_sauce');
-    await page.getByRole('button', { name: 'Login' }).click();
-    await page.locator('.inventory_item').first().getByRole('button', { name: 'Add to cart' }).click();
-    await page.locator('.shopping_cart_link').click();
-    await page.getByRole('button', { name: 'Checkout' }).click();
+  test(`Missing information: ${data.expectedError}`, async ({ loggedInPage, loginPage, cartPage, checkoutPage, page }) => {
+    await loginPage.goto()
+    await loginPage.login('standard_user', 'secret_sauce')
 
-    await page.locator('[data-test="firstName"]').fill(data.firstName);
-    await page.locator('[data-test="lastName"]').fill(data.lastName);
-    await page.locator('[data-test="postalCode"]').fill(data.zip);
-    await page.getByRole('button', { name: 'Continue' }).click();
+    await loggedInPage.addFirstItemToCart()
+    await loggedInPage.goToCart()
+    await cartPage.checkoutButton.click();
 
-    await expect(page.locator('[data-test="error"]')).toContainText(data.expectedError);
+    await checkoutPage.firstNameInput.fill(data.firstName);
+    await checkoutPage.lastNameInput.fill(data.lastName);
+    await checkoutPage.postalCodeInput.fill(data.zip);
+    await checkoutPage.continueButton.click();
+
+    await checkoutPage.expectErrorContains(data.expectedError)
   });
 }
