@@ -9,6 +9,7 @@ type PageFixture = {
     checkoutPage: CheckoutPage
     cartPage: CartPage
     inventoryPage: InventoryPage
+    loggedInPage: InventoryPage;
 }
 
 export const test = base.extend<PageFixture>({
@@ -30,6 +31,13 @@ export const test = base.extend<PageFixture>({
     inventoryPage: async ({ page }, use) => {
         const inventoryPage = new InventoryPage(page)
         await use(inventoryPage)
+    },
+
+    loggedInPage: async ({ page, loginPage }, use) => {
+        await loginPage.goto()
+        await loginPage.login('standard_user', 'secret_sauce')
+        const inventoryPage = new InventoryPage(page);
+        await use(inventoryPage);
     }
 })
 
