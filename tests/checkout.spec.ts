@@ -1,24 +1,12 @@
 import { test, expect } from '../fixtures/pages.fixture';
-import InventoryPage from '../pages/InventoryPage'
-import CartPage from '../pages/CartPage'
-import CheckoutPage from '../pages/CheckoutPage'
-
 
 test.describe('Checkout flow', () => {
-    let checkoutPage: CheckoutPage
-    let cartPage: CartPage
-    let inventoryPage: InventoryPage
-
-    test.beforeEach( async ({ loggedInPage, page }) => {
-        inventoryPage = new InventoryPage(page)
-        cartPage = new CartPage(page)
-        checkoutPage = new CheckoutPage(page)
-
+    test.beforeEach( async ({ loggedInPage }) => {
         await loggedInPage.addFirstItemToCart()
         await loggedInPage.goToCart()
     })
 
-    test('Checkout successfully with full information', async ({ page }) => {
+    test('Checkout successfully with full information', async ({ cartPage, checkoutPage }) => {
         await cartPage.goToCheckout()
         await checkoutPage.fillInformation('Tuong', 'Hoang', '00760')
         await checkoutPage.continueCheckout()
@@ -30,7 +18,7 @@ test.describe('Checkout flow', () => {
     });
 
 
-     test('Money in total overview displayed correctly', async ({ page }) => {
+     test('Money in total overview displayed correctly', async ({ cartPage, checkoutPage }) => {
         await cartPage.goToCheckout()
         await checkoutPage.fillInformation('Tuong', 'Hoang', '00760')
         await checkoutPage.continueCheckout()
