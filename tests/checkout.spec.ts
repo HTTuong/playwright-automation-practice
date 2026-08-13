@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import LoginPage from '../pages/LoginPage'
+import { test, expect } from '../fixtures/pages.fixture';
 import InventoryPage from '../pages/InventoryPage'
 import CartPage from '../pages/CartPage'
 import CheckoutPage from '../pages/CheckoutPage'
@@ -10,17 +9,13 @@ test.describe('Checkout flow', () => {
     let cartPage: CartPage
     let inventoryPage: InventoryPage
 
-    test.beforeEach( async ({page}) => {
-        const loginPage = new LoginPage(page)
-        await loginPage.goto()
-        await loginPage.login('standard_user', 'secret_sauce')
-
+    test.beforeEach( async ({ loggedInPage, page }) => {
         inventoryPage = new InventoryPage(page)
         cartPage = new CartPage(page)
         checkoutPage = new CheckoutPage(page)
 
-        await inventoryPage.addFirstItemToCart()
-        await inventoryPage.goToCart()
+        await loggedInPage.addFirstItemToCart()
+        await loggedInPage.goToCart()
     })
 
     test('Checkout successfully with full information', async ({ page }) => {
