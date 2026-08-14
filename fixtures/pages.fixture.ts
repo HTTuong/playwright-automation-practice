@@ -1,4 +1,5 @@
 import { test as base} from "@playwright/test";
+import {users} from '../test-data/users'
 import LoginPage from "../pages/LoginPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import CartPage from "../pages/CartPage";
@@ -35,7 +36,7 @@ export const test = base.extend<PageFixture>({
 
     loggedInPage: async ({ page, loginPage }, use) => {
         await loginPage.goto()
-        await loginPage.login('standard_user', 'secret_sauce')
+        await loginPage.login(users.standard.username, users.standard.password)
         const inventoryPage = new InventoryPage(page);
         await use(inventoryPage);
     }
