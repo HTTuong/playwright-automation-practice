@@ -38,4 +38,17 @@ export default class InventoryPage {
     async expectCartBadgeHidden() {
         await expect(this.cartBadge).toBeHidden();
     }
+
+    async sortBy(option: string) {
+        await this.sortDropdown.selectOption(option);
+    }
+
+    async getAllItemPrices(): Promise<number[]> {
+        const priceTexts = await this.page.locator('.inventory_item_price').allTextContents();
+        return priceTexts.map(p => parseFloat(p.replace('$', '')));
+    }
+
+    async getAllItemNames(): Promise<string[]> {
+        return await this.page.locator('.inventory_item_name').allTextContents();
+    }
 }
