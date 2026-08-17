@@ -6,6 +6,12 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+allure-results/
+allure-report/
+test-results/
+playwright-report/
+
+# Env
 .env
 .env.example
 

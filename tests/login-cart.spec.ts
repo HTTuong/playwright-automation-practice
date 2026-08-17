@@ -1,6 +1,11 @@
 import { test, expect } from '../fixtures/pages.fixture';
+import allure from 'allure-js-commons';
 
-test.describe('Test Login cart', () => {
+test.describe('Test Login cart', async () => {
+    await allure.severity('critical');
+    await allure.description('Check login with correct account');
+    await allure.tags('smoke', 'login');
+
     test('Sucessfully login', async ({ loginPage, page }) => {
         await loginPage.goto()
         await loginPage.login('standard_user', 'secret_sauce')
