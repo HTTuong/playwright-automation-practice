@@ -13,6 +13,20 @@ test('Mock error 500 to test error process', async ({ page }) => {
   expect(response.status()).toBe(500);
 });
 
+test('Mock not found 404', async ({page}) => {
+    await page.route('**/jsonplaceholder.typicode.com/posts', async ( route ) => {
+        route.fulfill({
+            status: 404,
+            contentType: 'application/json',
+            body: JSON.stringify({ data: [] }),
+        })
+    })
+
+    const response = await page.request.get('https://jsonplaceholder.typicode.com/posts/1');
+    expect(response.status()).toBe(404);
+
+})
+
 test('Mock timeout - request is delayed', async ({ page }) => {
   await page.route('**/jsonplaceholder.typicode.com/posts/1', async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -20,7 +34,7 @@ test('Mock timeout - request is delayed', async ({ page }) => {
   });
 
   const start = Date.now();
-  await page.request.get('https://jsonplaceholder.typicode.com/posts/1');
+  await page.request.get('https://jsonplaceholder.typicode.com/posts');
   const duration = Date.now() - start;
   expect(duration).toBeGreaterThanOrEqual(2000);
 });
