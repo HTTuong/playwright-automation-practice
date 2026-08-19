@@ -10,6 +10,7 @@ allure-results/
 allure-report/
 test-results/
 playwright-report/
+.storageState.json
 
 # Env
 .env
