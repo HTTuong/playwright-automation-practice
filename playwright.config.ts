@@ -43,21 +43,16 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'auth-required', // test without available login  (test login)
+      testMatch: /login-cart\.spec\.ts/,
+      use: { storageState: { cookies: [], origins: [] } }, // no state, not yet login
     },
-
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'authenticated', // test with available login (cart, checkout, sort...)
+      testIgnore: /login-cart\.spec\.ts/,
+      use: { storageState: 'storageState.json' },
     },
     
-
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
