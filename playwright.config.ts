@@ -40,7 +40,6 @@ export default defineConfig({
     video: 'retain-on-failure', 
   },
 
-  /* Configure projects for major browsers */
   projects: [
     {
       name: 'auth-required', // test without available login  (test login)

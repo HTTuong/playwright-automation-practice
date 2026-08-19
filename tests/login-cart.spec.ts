@@ -1,12 +1,12 @@
 import { test, expect } from '../fixtures/pages.fixture';
-import allure from 'allure-js-commons';
+import * as allure from 'allure-js-commons';
 
-test.describe('Test Login cart', async () => {
-    await allure.severity('critical');
-    await allure.description('Check login with correct account');
-    await allure.tags('smoke', 'login');
-
+test.describe('Test Login cart', () => {
     test('Sucessfully login', async ({ loginPage, page }) => {
+        await allure.severity('critical');
+        await allure.description('Check login with correct account');
+        await allure.tags('smoke', 'login');
+
         await loginPage.goto()
         await loginPage.login('standard_user', 'secret_sauce')
 
@@ -15,6 +15,9 @@ test.describe('Test Login cart', async () => {
     })
 
     test('Login fail with wrong password', async ({ loginPage, page }) => {
+        await allure.severity('critical');
+        await allure.tags('login');
+
         await loginPage.goto()
         await loginPage.login('standard_user', 'sai_password')
         await expect(page.locator('[data-test="error"]')).toBeVisible();
@@ -22,16 +25,18 @@ test.describe('Test Login cart', async () => {
     });
 
     test('Login wwith locked_out_user', async ({ loginPage, page }) => {
+        await allure.tags('login');
+
         await loginPage.goto()
         await loginPage.login('locked_out_user', 'secret_sauce')
-
-        await page.getByRole('button', { name: 'Login' }).click();
         await loginPage.expectErrorContains('locked out');
     });
 
     test('Report username required', async ({ loginPage, page }) => {
+        await allure.tags('login', 'validation');
+
         await loginPage.goto()
         await loginPage.login('', '')
         await loginPage.expectErrorContains('Username is required')
-  });
+    });
 })
