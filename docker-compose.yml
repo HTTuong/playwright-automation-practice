@@ -1,0 +1,10 @@
+services:
+  tests:
+    build: .
+    environment:
+      - BASE_URL=https://www.saucedemo.com
+      - ENV_NAME=docker
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+      - ./allure-results:/app/allure-results
