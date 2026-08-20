@@ -116,6 +116,14 @@ On failure, the report includes a screenshot, video, and full execution trace fo
 
 **Total: 120 test cases**
 
+## Running with Docker
+
+```
+docker compose up --build
+```
+
+Reports will be available in \`playwright-report/\` and \`test-results/\` after the run completes.
+
 ## Architecture & Design Decisions
 
 **Page Object Model.** Each page is encapsulated in its own class exposing locators and user-facing actions (`login()`, `addFirstItemToCart()`). Tests read as business scenarios, not DOM manipulation — and a UI change only requires updating one file.
