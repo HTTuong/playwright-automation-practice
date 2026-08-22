@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/pages.fixture';
 import * as allure from 'allure-js-commons';
 
 test.describe('Test Login cart', () => {
-    test('Sucessfully login', async ({ loginPage, page }) => {
+    test('Sucessfully login @smoke', async ({ loginPage, page }) => {
         await allure.severity('critical');
         await allure.description('Check login with correct account');
         await allure.tags('smoke', 'login');
