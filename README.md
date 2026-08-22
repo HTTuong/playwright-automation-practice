@@ -121,8 +121,21 @@ On failure, the report includes a screenshot, video, and full execution trace fo
 ```
 docker compose up --build
 ```
-
 Reports will be available in \`playwright-report/\` and \`test-results/\` after the run completes.
+
+## CI/CD
+
+Every push and pull request to \`main\` triggers the GitHub Actions workflow, which runs the full suite inside the official Playwright Docker image, then uploads both HTML and Allure reports as build artifacts.
+
+Smoke tests (tagged \`@smoke\`) run first for fast feedback; the full regression suite follows.
+
+## Test Coverage
+- Login, Cart, Checkout flows 
+- Product sorting 
+- API testing 
+- Mock API — simulated error responses and network delays
+- Data reconciliation — cross-verifies UI-displayed product data against a reference SQLite dataset
+- Authentication reuse via \`storageState\` — login executes once per suite run, not per test
 
 ## Architecture & Design Decisions
 
