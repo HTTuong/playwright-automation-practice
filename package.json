@@ -12,11 +12,14 @@
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
     "@playwright/test": "^1.62.1",
-    "@types/better-sqlite3": "^9.6.0",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.2.0",
+    "@types/sql.js": "^1.4.11",
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.10.2",
-    "better-sqlite3": "^13.0.3",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "tsx": "^4.23.12"
+  },
+  "dependencies": {
+    "sql.js": "^1.14.2"
   }
 }
