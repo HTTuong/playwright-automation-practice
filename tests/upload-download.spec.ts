@@ -24,5 +24,12 @@ test.describe('File Upload', () => {
 
     await expect(page.locator('#uploaded-files')).toHaveText('generated.txt');
     });
+
+    test('Click on submit without choosing any file', async ({ page }) => {
+        await page.goto('https://the-internet.herokuapp.com/upload');
+        await page.locator('#file-submit').click();
+
+        await expect(page.locator('#uploaded-files')).toHaveText('');
+    });
 });
 
