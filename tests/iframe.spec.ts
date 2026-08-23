@@ -21,8 +21,8 @@ test.describe('Iframe handling', () => {
     await editorBody.click();
     await editorBody.press('Control+A');
     await editorBody.press('Delete');
-    await editorBody.type('New Text');
+    await editorBody.type('A New Text');
 
-    await expect(editorBody).toHaveText('New Text');
+    await expect(editorBody).toHaveText('A New Text');
   });
 });
