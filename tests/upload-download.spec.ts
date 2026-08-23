@@ -31,5 +31,16 @@ test.describe('File Upload', () => {
 
         await expect(page.locator('#uploaded-files')).toHaveText('');
     });
+
+    test('Download file và verify file name', async ({ page }) => {
+        await page.goto('https://the-internet.herokuapp.com/download');
+
+        const downloadPromise = page.waitForEvent('download');
+        await page.locator('a.example').first().click();
+        const download = await downloadPromise;
+
+        expect(download.suggestedFilename()).toBeTruthy();
+        console.log('Downloaded:', download.suggestedFilename());
+    });
 });
 
