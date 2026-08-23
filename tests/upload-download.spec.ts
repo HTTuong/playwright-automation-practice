@@ -42,5 +42,20 @@ test.describe('File Upload', () => {
         expect(download.suggestedFilename()).toBeTruthy();
         console.log('Downloaded:', download.suggestedFilename());
     });
+
+
+    test('Verify downloaded file with available content', async ({ page }) => {
+        await page.goto('https://the-internet.herokuapp.com/download');
+
+        const downloadPromise = page.waitForEvent('download');
+        await page.locator('a.example').first().click();
+        const download = await downloadPromise;
+
+        const filePath = await download.path();
+        const fs = require('fs');
+        const content = fs.readFileSync(filePath!, 'utf-8');
+
+        expect(content.length).toBeGreaterThan(0);
+    });
 });
 
