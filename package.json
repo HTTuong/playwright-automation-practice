@@ -21,5 +21,11 @@
   },
   "dependencies": {
     "sql.js": "^1.14.2"
+  },
+  "compilerOptions": {
+    "types": [
+      "@playwright/test",
+      "node"
+    ]
   }
 }
