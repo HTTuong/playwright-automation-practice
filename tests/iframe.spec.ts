@@ -19,11 +19,8 @@ test.describe('Iframe handling', () => {
 
     const editableArea = page.frameLocator('#editor-frame').locator('#editable-area');
     await expect(editableArea).toContainText('Default content');
-
-    await editableArea.click();
-    await editableArea.press('Control+A');
-    await editableArea.press('Delete');
-    await editableArea.type('A New Text');
+    
+    await editableArea.fill('A New Text');
 
     await expect(editableArea).toHaveText('A New Text');
   });

@@ -31,11 +31,7 @@ test.describe('File Upload', () => {
 
     await page.locator('#file-submit').click();
 
-    // Defensive assertion: we don't yet know the exact server behavior for an empty
-    // submission (client-side validation block vs. server error page), so we only
-    // assert that the upload input is still present - meaning the empty submit
-    // did not silently "succeed" as if a real file was uploaded.
-    await expect(page.locator('#file-upload')).toBeVisible();
+    await expect(page.locator('body')).not.toContainText('File Uploaded!');
   });
 });
 
