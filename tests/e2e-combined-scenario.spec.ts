@@ -19,7 +19,7 @@ test.describe('Combined scenario — upload, multi-tab, iframe', () => {
     await editableArea.fill('Edited from the second tab');
     await expect(editableArea).toHaveText('Edited from the second tab');
 
-    // Close the new tab mới, verify original tab
+    // Close the new tab, verify original tab
     await newTab.close();
     await expect(page.locator('#uploaded-files')).toHaveText('sample.txt');
     expect(context.pages().length).toBe(1);
