@@ -136,6 +136,10 @@ Smoke tests (tagged \`@smoke\`) run first for fast feedback; the full regression
 - Mock API — simulated error responses and network delays
 - Data reconciliation — cross-verifies UI-displayed product data against a reference SQLite dataset
 - Authentication reuse via \`storageState\` — login executes once per suite run, not per test
+- File upload/download — upload via file path and in-memory Buffer, download verification via local fixture (avoids flaky external file-hosting dependency)
+- Iframe handling — read/write content inside nested iframe context, using a self-hosted fixture instead of a third-party embed (avoids breakage from external service policy changes)
+- Multi-tab/window handling — verify state isolation between browser tabs within the same context
+- Combined E2E scenario — a single flow spanning upload, multi-tab, and iframe interactions, verifying state consistency across tab boundaries
 
 ## Architecture & Design Decisions
 
@@ -147,6 +151,8 @@ Smoke tests (tagged \`@smoke\`) run first for fast feedback; the full regression
 
 **Environment-based configuration.** `baseURL` is read from `.env`, not hardcoded. Switching environments (dev/staging) requires no code changes.
 
+**Note:** 
+Some tests initially depended on a third-party demo site's iframe embed and shared file-listing page. Both broke independently of this codebase (a TinyMCE Cloud API-key policy change, and shared public upload state). Replaced with self-hosted local HTML fixtures under `test-fixtures/` — a deliberate choice to keep the suite deterministic and independent of third-party uptime/state.
 
 #### Author: 
 Tuong Hoang
